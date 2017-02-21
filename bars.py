@@ -1,6 +1,8 @@
 import json
 import os
 from geopy.distance import vincenty
+import win_unicode_console
+win_unicode_console.enable()
 
 
 def load_data(filepath):
@@ -26,6 +28,23 @@ def get_closest_bar(data, longitude, latitude):
                 data["geoData"]["coordinates"]).km)
 
 
+def get_coordinates_from_user():
+    try:
+        latitude = float(input("Введите вашу широту: "))
+    except ValueError:
+        latitude = None
+
+    try:
+        longitude = float(input("Введите вашу долготу: "))
+    except ValueError:
+        longitude = None
+
+    if longitude is None or latitude is None:
+        print("Некорректные координаты")
+    else:
+        return longitude, latitude
+
+
 if __name__ == '__main__':
     filepath = input("Введите путь до файла: ")
     data_from_json = load_data(filepath)
@@ -38,19 +57,6 @@ if __name__ == '__main__':
             biggest_bar["Name"], biggest_bar["SeatsCount"]))
         print("самый маленький бар '{}' и в нем {} мест".format(
             smallest_bar["Name"], smallest_bar["SeatsCount"]))
-
-        try:
-            latitude = float(input("Введите вашу широту: "))
-        except ValueError:
-            latitude = None
-
-        try:
-            longitude = float(input("Введите вашу долготу: "))
-        except ValueError:
-            longitude = None
-
-        if longitude is None or latitude is None:
-            print("Некорректные координаты")
-        else:
-            closest_bar = get_closest_bar(data_from_json, longitude, latitude)
-            print("К вам ближе всего бар '{}'".format(closest_bar["Name"]))
+        longitude, latitude = get_coordinates_from_user()
+        closest_bar = get_closest_bar(data_from_json, longitude, latitude)
+        print("К вам ближе всего бар '{}'".format(closest_bar["Name"]))
