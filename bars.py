@@ -1,8 +1,6 @@
 import json
 import os
 from geopy.distance import vincenty
-import win_unicode_console
-win_unicode_console.enable()
 
 
 def load_data(filepath):
